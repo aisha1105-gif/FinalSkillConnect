@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>Client Sign Up</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a href="home">Home</a>
+                <a href="aboutUs">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1>Client: Sign Up</h1>
+        <form th:action="@{/client-signup}" method="POST" th:object="${client}">
+            <div>
+                <label for="fname">First Name:</label>
+                <input type="text" id="fname" th:field="*{first_name}" placeholder="Enter your first name" required />
+                <span th:if="${#fields.hasErrors('first_name')}" th:classappend="'error'" th:errors="*{first_name}">fname Error</span>
+            </div>
+    
+            <div>
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" th:field="*{last_name}" placeholder="Enter your last name" required />
+                <span th:if="${#fields.hasErrors('last_name')}" th:classappend="'error'" th:errors="*{last_name}">lname Error</span>
+            </div>
+            
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" th:field="*{email}" placeholder="Enter your email" required />
+                <span th:if="${#fields.hasErrors('email')}" th:classappend="'error'" th:errors="*{email}">Email Error</span>
+            </div>
+    
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required />
+                <span th:if="${#fields.hasErrors('password')}" th:classappend="'error'" th:errors="*{password}">Password Error</span>
+            </div>
+    
+            <div>
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" th:field="*{phone}" placeholder="Enter your phone number (10-15 digits)" />
+                <span th:if="${#fields.hasErrors('phone')}" th:classappend="'error'" th:errors="*{phone}">Phone Error</span>
+            </div>
+    
+            <div>
+                <label for="industry">Related Industry:</label>
+                <input type="text" id="industry" th:field="*{relatedIndustry}" placeholder="Enter your related industry" maxlength="100" />
+                <span th:if="${#fields.hasErrors('relatedIndustry')}" th:classappend="'error'" th:errors="*{relatedIndustry}">Industry Error</span>
+            </div>
+    
+            <div>
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" th:field="*{companyName}" placeholder="Enter your company name" maxlength="100" />
+                <span th:if="${#fields.hasErrors('companyName')}" th:classappend="'error'" th:errors="*{companyName}">Company Name Error</span>
+            </div>
+    
+            <!-- Display Error if Freelancer with same email already exists -->
+            <div th:if="${error}">
+                <p style="color: red;">[[${error}]]</p>
+            </div>
+    
+            <button type="submit" class="btn-primary">Sign Up</button>
+        </form>
+    </main>
+</body>
+</html>

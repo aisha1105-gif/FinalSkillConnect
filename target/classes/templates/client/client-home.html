@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>SkillConnect: Dashboard</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a href="home">Home</a>
+                <a href="aboutUs">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- Welcome Section -->
+        <h1 th:text="${nullClient} ? 'Welcome, Client!' : 'Welcome ' + ${client.first_name} + '!'">Welcome, Client!</h1>
+
+
+        <!-- Success Message Alert -->
+        <div th:if="${message}" class="alert">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="button-container">
+            <a href="/client-profile">
+                <button class="btn-primary">View Profile</button>
+            </a>
+            <a th:href="@{/client/view-requests}">
+                <button class="btn-secondary">View Requests</button>
+            </a>
+            <a th:href="@{/client/create-request}">
+                <button class="btn-primary">Find Talent</button>
+            </a>
+            <a href="home">
+                <button class="btn-secondary">Home</button>
+            </a>
+        </div>
+    </main>
+    
+
+</body>
+</html>

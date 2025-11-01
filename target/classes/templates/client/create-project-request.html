@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>Create Request</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a th:href="@{home}">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a th:href="@{/client-home}">Home</a>
+                <a th:href="@{/aboutUs}">About Us</a>
+
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="form-container">
+            <h2>Create a New Project Request</h2>
+    
+            <form th:action="@{/client/create-request}" th:object="${project}" method="post">
+                
+                <!-- Project Name -->
+                <div class="form-group">
+                    <label for="name">Project Name:</label>
+                    <input type="text" id="name" th:field="*{name}" placeholder="Enter project name" required />
+                    <span th:if="${#fields.hasErrors('name')}" class="error-message" th:errors="*{name}">Project Name Error</span>
+                </div>
+    
+                <!-- Criteria -->
+                <div class="form-group">
+                    <label for="criteria">Project Criteria:</label>
+                    <textarea id="criteria" th:field="*{criteria}" placeholder="e.g., Write a 200-word essay on climate change..." required></textarea>
+                    <span th:if="${#fields.hasErrors('criteria')}" class="error-message" th:errors="*{criteria}">Criteria Error</span>
+                </div>
+    
+                <!-- Delivery Time -->
+                <div class="form-group">
+                    <label for="delivery_time">Delivery Time:</label>
+                    <select id="delivery_time" th:field="*{delivery_time}" required>
+                        <option value="" disabled selected>Select Delivery Time</option>
+                        <option value="3 hours">3 hours</option>
+                        <option value="2 days">2 days</option>
+                        <option value="anytime">Anytime</option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('delivery_time')}" class="error-message" th:errors="*{delivery_time}">Delivery Time Error</span>
+                </div>
+    
+                <!-- Skill Selection -->
+                <div class="form-group">
+                    <label for="skillCategory">Skill Category:</label>
+                    <select id="skillCategory" th:field="*{skillCategory}" required>
+                        <option value="" disabled selected>Select a Skill</option>
+                        <option th:each="skill : ${skills}"
+                                th:value="${skill.id}" 
+                                th:text="${skill.name}">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('skillCategory')}" class="error-message" th:errors="*{skillCategory}">Skill Error</span>
+                </div>
+
+    
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary">Create Request</button>
+    
+            </form>
+        </div>
+    </main>
+    

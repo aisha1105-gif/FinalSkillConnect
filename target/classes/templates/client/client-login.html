@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>SkillConnect: Login</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a href="home">Home</a>
+                <a href="aboutUs">About Us</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <div class="form-container">
+            <h2>Client: Login</h2>
+            
+            <!-- Login Form -->
+            <form th:action="@{client-login}" method="POST" th:object="${client}">
+                
+                <!-- Email Input -->
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" placeholder="Enter your email" required />
+                    <span th:if="${#fields.hasErrors('email')}" th:classappend="'error'" th:errors="*{email}" class="error-message">Email Error</span>
+                </div>
+                
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required />
+                    <span th:if="${#fields.hasErrors('password')}" th:classappend="'error'" th:errors="*{password}" class="error-message">Password Error</span>
+                </div>
+    
+                <!-- Login Error Message -->
+                <div th:if="${error}">
+                    <span class="error">[[${error}]]</p>
+                </div>
+    
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary">Login</button>
+    
+                <!-- Sign Up Link -->
+                <p class="signup-link">Don't have an account? <a href="/client-signup">Sign up here</a></p>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

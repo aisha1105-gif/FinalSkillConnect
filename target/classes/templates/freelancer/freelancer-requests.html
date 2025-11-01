@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>Your Requests</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a th:href="@{home}">
+                <img src="/images/SkillConnect-favicon.jpeg" alt="SkillConnect" title="SkillConnect" /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a th:href="@{/freelancer-home}">Home</a>
+                <a th:href="@{/aboutUs}">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- Error Message Alert -->
+        <div th:if="${error}">
+            <p style="color: red;">[[${error}]]</p>
+        </div>
+
+        <!-- Success Message Alert -->
+        <div th:if="${message}" class="alert">
+            <p style="color: green;">[[${message}]]</p>
+        </div>
+        
+        <h1>Requests Sent to You</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Client</th>
+                    <th>Bid Status</th>
+                    <th>Project Status</th>
+                    <th>Payment Status</th>
+                    <th>Delivery Time</th>
+                    <th>Bid Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="bid : ${bids}">
+                    <td th:text="${bid.project.name}"></td>
+                    <td th:text="${bid.project.client.first_name}"></td>
+                    <td th:text="${bid.status}"></td>
+                    <td th:text="${bid.project.projectStatus.status}"></td>
+                    <td th:text="${bid.project.payment != null ? bid.project.payment.payment_status : 'N/A'}"></td>
+                    <td th:text="${bid.project.delivery_time}"></td>
+                    <td th:text="${bid.bidAmount != 0 ? bid.bidAmount : 'N/A'}"></td>
+                    <td>
+                        <!-- Accept/Reject Forms for Pending Bids -->
+                        <div th:if="${bid.status == 'Pending'}">
+                            <!-- Reject Form -->
+                            <form th:action="@{/freelancer/respond-to-project}" method="post">
+                                <input type="hidden" name="bidId" th:value="${bid.bidId}">
+                                <input type="hidden" name="response" value="reject">
+                                <button type="submit">Reject</button>
+                            </form>
+                            <!-- Accept Form -->
+                            <form th:action="@{/freelancer/respond-to-project}" method="post">
+                                <input type="hidden" name="bidId" th:value="${bid.bidId}">
+                                <input type="hidden" name="response" value="accept">
+                                <input type="number" name="bidAmount" placeholder="Enter Bid Amount" required min="1">
+                                <button type="submit">Accept & Bid</button>
+                            </form>
+                        </div>
+                        <!-- Complete Project Button for Selected and Accepted Projects -->
+                        <form th:if="${bid.status == 'Selected' and bid.project.projectStatus.status == 'Accepted'}" 
+                              th:action="@{/freelancer/complete-project}" method="post">
+                            <input type="hidden" name="projectId" th:value="${bid.project.id}"/>
+                            <button type="submit">Complete Project</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

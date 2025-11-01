@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>SkillConnect: Login</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a href="home">Home</a>
+                <a href="aboutUs">About Us</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <div class="form-container">
+            <h2>Admin: Login</h2>
+
+    <main style="max-width:400px;margin:40px auto;">
+        <div th:if="${error}" style="color:red;">[[${error}]]</div>
+
+        <form th:action="@{/admin-login}" method="post">
+            <label>Email: <input type="email" name="email" required /></label><br/><br/>
+            <label>Password: <input type="password" name="password" required /></label><br/><br/>
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+
+        <p style="margin-top:20px;">
+            <small>Hard-coded credentials: <br> 
+            <b>Email:</b> admin@skillconnect.com <br>
+            <b>Password:</b> admin123</small> 
+        </p>
+    </main>
+</body>
+</html>
