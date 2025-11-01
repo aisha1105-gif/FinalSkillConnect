@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>SkillConnect: Profile</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="home">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a href="freelancer-home">Home</a>
+                <a href="aboutUs">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h2>Your Profile</h2>
+        
+        <!-- Success Message Alert -->
+        <div th:if="${message}" class="alert">
+            <p th:text="${message}"></p>
+        </div>
+
+        <form th:action="@{/freelancer-profile/update}" method="post" th:object="${freelancer}">
+            <div class="profile-container">
+    
+                <!-- Full Name -->
+                <div class="profile-row">
+                    <span class="profile-label">Full Name</span>
+                    <span class="profile-value" th:text="${freelancer.first_name} + ' ' + ${freelancer.last_name}"></span>
+                </div>
+    
+                <!-- Id -->
+                <div class="profile-row">
+                    <span class="profile-label">ID</span>
+                    <span class="profile-value" th:text="${freelancer.id}"></span>
+                </div>
+    
+                <!-- First Name -->
+                <div class="profile-row">
+                    <span class="profile-label">First Name</span>
+                    <span class="profile-value" th:text="${freelancer.first_name}"></span>
+                    <input class="profile-input" type="text" th:field="*{first_name}">
+                    <span th:if="${#fields.hasErrors('first_name')}" th:classappend="'error'" th:errors="*{first_name}">fname Error</span>
+                    <button type="button" class="edit-btn" onclick="editField(this)">Edit</button>
+                    <button type="submit" class="save-btn">Save</button>
+                </div>
+    
+                <!--Last Name-->
+                <div class="profile-row">
+                    <span class="profile-label">Last Name</span>
+                    <span class="profile-value" th:text="${freelancer.last_name}"></span>
+                    <input class="profile-input" type="text" th:field="*{last_name}">
+                    <span th:if="${#fields.hasErrors('last_name')}" th:classappend="'error'" th:errors="*{last_name}">lname Error</span>
+                    <button type="button" class="edit-btn" onclick="editField(this)">Edit</button>
+                    <button type="save" class="save-btn">Save</button>
+                </div>
+    
+                <div class="profile-row">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value" th:text="${freelancer.email}"></span>
+                    <input type="email" class="profile-input" th:field="*{email}">
+                    <span th:if="${#fields.hasErrors('email')}" th:classappend="'error'" th:errors="*{email}">Email Error</span>
+                    <button type="button" class="edit-btn" onclick="editField(this)">Edit</button>
+                    <button type="save" class="save-btn">Save</button>
+                </div>
+    
+                <!-- Password -->
+                <div class="profile-row">
+                    <span class="profile-label">Password</span>
+                    <span class="profile-value" th:text="${freelancer.password}"></span>
+                    <input class="profile-input" type="text" th:field="*{password}">
+                    <span th:if="${#fields.hasErrors('password')}" th:classappend="'error'" th:errors="*{password}">Password Error</span>
+                    <button type="button" class="edit-btn" onclick="editField(this)">Edit</button>
+                    <button type="submit" class="save-btn">Save</button>
+                </div>
+    
+                <!-- Works Completed -->
+                <div class="profile-row">
+                    <span class="profile-label">Works Completed</span>
+                    <span class="profile-value" th:text="${freelancer.works_completed}"></span>
+                </div>
+    
+                <!-- Ranking -->
+                 <div class="profile-row">
+                    <span class="profile-label">Ranking</span>
+                    <span class="profile-value" th:text="${freelancer.ranking}"></span>
+                 </div>
+    
+                <!-- Updation Error Message -->
+                <div th:if="${error}">
+                    <p><span class="error">[[${error}]]</p>
+                </div>
+
+            </div>
+        </form>
+        <div>
+            <form th:action="@{/freelancer-profile/delete}" method="post" th:object="${freelancer}">
+                <button onclick="deleteBtn()" class="btn-primary">
+                    Delete Profile
+                </button>
+            </form>
+        </div>
+        </main>
+
+    <script>
+    function editField(btn) {
+        const row = btn.closest('.profile-row');
+        const valueSpan = row.querySelector('.profile-value');
+        const inputField = row.querySelector('.profile-input');
+        const saveBtn = row.querySelector('.save-btn');
+
+        valueSpan.style.display = 'none';
+        inputField.style.display = 'block';
+        saveBtn.style.display = 'inline-block';
+        btn.style.display = 'none';
+    }
+
+    function deleteBtn() {
+        return confirm("Are you sure you want to delete your profile?");
+    }
+    </script>
+</body>
+</html>
