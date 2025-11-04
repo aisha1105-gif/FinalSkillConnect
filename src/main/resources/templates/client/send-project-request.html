@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>Send Request</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a th:href="@{home}">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a th:href="@{/client-home}">Home</a>
+                <a th:href="@{/aboutUs}">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- Error Message Alert -->
+        <div th:if="${error}">
+            <p style="color: red;">[[${error}]]</p>
+        </div>
+
+        <!-- Success Message Alert -->
+        <div th:if="${message}" class="alert">
+            <p style="color: green;">[[${message}]]</p>
+        </div>
+
+        <h2>Project Details</h2>
+    <p><strong>Name:</strong> [[${project.name}]]</p>
+    <p><strong>Criteria:</strong> [[${project.criteria}]]</p>
+    <p><strong>Timeframe:</strong> [[${project.delivery_time}]]</p>
+    <p><strong>Skill Category:</strong> [[${project.skillCategory.name}]]</p>
+
+    <h2>Freelancers Matching Project Skill</h2>
+    <form th:action="@{/client/send-project-request}" method="post">
+        <input type="hidden" name="projectId" th:value="${project.id}">
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Ranking</th>
+                    <th>Works Completed</th>
+                    <th>Price (Rs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="entry : ${freelancerData}">
+                    <td>
+                        <input type="checkbox" 
+                            name="freelancerIds" 
+                            th:value="${entry[0].id}">
+                    </td>
+                    <td th:text="${entry[0].first_name + ' ' + entry[0].last_name}"></td>
+                    <td th:text="${entry[0].ranking}"></td>
+                    <td th:text="${entry[0].works_completed}"></td>
+                    <td th:text="${entry[1]}"></td> <!-- price -->
+                </tr>
+            </tbody>
+        </table>
+        
+        <button type="submit">Send Project Requests</button>
+    </form>
+    </main>
+</body>
+</html>

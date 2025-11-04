@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/images/SkillConnect-favicon.jpeg">
+    <link rel="stylesheet" th:href="@{/css/stylesheet.css}" />
+    <title>Your Requests</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a th:href="@{home}">
+                <img
+                     src="/images/SkillConnect-favicon.jpeg"
+                     alt="SkillConnect"
+                     title="SkillConnect"
+                     /> 
+            </a>
+            <h1 class="logo">SkillConnect: Revolutionizing the Way You Work</h1>
+            <nav class="nav">
+                <a th:href="@{/client-home}">Home</a>
+                <a th:href="@{/aboutUs}">About Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- Error Message Alert -->
+        <div th:if="${error}">
+            <p style="color: red;">[[${error}]]</p>
+        </div>
+
+        <!-- Success Message Alert -->
+        <div th:if="${message}" class="alert">
+            <p style="color: green;">[[${message}]]</p>
+        </div>
+
+        <h2>Your Project Requests</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Skill Category</th>
+                    <th>Status</th>
+                    <th>Delivery Time</th>
+                    <th>Assigned Freelancer</th>
+                    <th>Bids</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${requests}">
+                    <td th:text="${request.name}"></td>
+                    <td th:text="${request.skillCategory.name}"></td>
+                    <td th:text="${request.projectStatus.status}"></td>
+                    <td th:text="${request.delivery_time}"></td>
+                    <td th:text="${request.freelancer != null ? request.freelancer.first_name + ' ' + request.freelancer.last_name : 'Not Assigned'}"></td>
+                    <td>
+                        <div th:if="${bidsMap.get(request.id) != null and not bidsMap.get(request.id).empty}">
+                            <table border="1" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Freelancer</th>
+                                        <th>Bid Amount</th>
+                                        <th>Bid Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="bid : ${bidsMap.get(request.id)}">
+                                        <td th:text="${bid.freelancer.first_name + ' ' + bid.freelancer.last_name}"></td>
+                                        <td th:text="${bid.bidAmount != 0 ? bid.bidAmount : 'N/A'}"></td>
+                                        <td th:text="${bid.status}"></td>
+                                        <td>
+                                            <div th:if="${bid.status == 'Accepted'}">
+                                                <form th:action="@{/client/select-freelancer}" method="post">
+                                                    <input type="hidden" name="projectId" th:value="${request.id}" />
+                                                    <input type="hidden" name="bidId" th:value="${bid.bidId}" />
+                                                    <button type="submit" th:disabled="${request.projectStatus.status != 'Pending'}">Select Freelancer</button>
+                                                </form>
+                                            </div>
+                                            <div th:unless="${bid.status == 'Accepted'}">
+                                                <span th:text="${bid.status == 'Pending' ? 'Awaiting freelancer response' : 'Not selectable'}"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:unless="${bidsMap.get(request.id) != null and not bidsMap.get(request.id).empty}">
+                            No bids received yet
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Pay button only if project is Completed or Overdue -->
+                        <form th:if="${request.projectStatus.status == 'Completed' or request.projectStatus.status == 'Overdue'}" 
+                              th:action="@{/client/pay-project}" method="post">
+                            <input type="hidden" name="projectId" th:value="${request.id}"/>
+                            <button type="submit">Pay Now</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>        
+        </table>
+    </main>
+</body>
+</html>
